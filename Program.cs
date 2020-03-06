@@ -12,6 +12,12 @@ namespace LinqIntro
             {
                 new Student()
                 {
+                Name = "Onterio",
+                CohortName = "Day Cohort 37"
+                },
+
+                new Student()
+                {
                 Name = "Spencer",
                 CohortName = "Day Cohort 37"
                 },
@@ -62,6 +68,32 @@ namespace LinqIntro
             });
 
             var StudentsIn37 = nssStudents.Where(student => student.CohortName == "Day Cohort 37");
+            var spencer = nssStudents.FirstOrDefault(student =>
+            {
+                return student.Name.Contains("pen");
+            });
+
+            var hasStudentsIn37 = nssStudents.Any(student =>
+            {
+                return student.CohortName == "Day Cohort 37";
+            });
+
+            var cohortBreakDown = nssStudents
+                .GroupBy(student => student.CohortName)
+                .Select(group =>
+                {
+                    return new CohortReport
+                    {
+                    StudentCount = group.Count(),
+                    CohortName = group.Key
+
+                    };
+                });
+        }
+        public class CohortReport
+        {
+            public string CohortName { get; set; }
+            public int StudentCount { get; set; }
         }
     }
 }
