@@ -18,37 +18,37 @@ namespace LinqIntro
 
                 new Student()
                 {
-                Name = "Spencer",
+                Name = "Luis",
                 CohortName = "Day Cohort 37"
                 },
 
                 new Student()
                 {
-                Name = "Heidi",
+                Name = "Tyler",
                 CohortName = "Day Cohort 35"
                 },
 
                 new Student()
                 {
-                Name = "Namita",
+                Name = "Spenser",
                 CohortName = "Day Cohort 37"
                 },
 
                 new Student()
                 {
-                Name = "Holden",
+                Name = "Phillip",
                 CohortName = "Day Cohort 37"
                 },
 
                 new Student()
                 {
-                Name = "Aryn",
+                Name = "Aja",
                 CohortName = "Day Cohort 35"
                 },
 
                 new Student()
                 {
-                Name = "Aryn",
+                Name = "Rebecca",
                 CohortName = "Day Cohort 35"
                 },
 
@@ -78,6 +78,7 @@ namespace LinqIntro
                 return student.CohortName == "Day Cohort 37";
             });
 
+            // GroupBy is always followed by Select
             var cohortBreakDown = nssStudents
                 .GroupBy(student => student.CohortName)
                 .Select(group =>
@@ -89,11 +90,81 @@ namespace LinqIntro
 
                     };
                 });
+
+            List<Product> shoppingCart = new List<Product>()
+            {
+                new Product("Bike", 109.99),
+                new Product("Mittens", 6.49),
+                new Product("Lollipop", 0.50),
+                new Product("Pocket Watch", 584.00)
+            };
+
+            IEnumerable<Product> inexpensive = from product in shoppingCart
+            where product.Price < 100.00
+            orderby product.Price descending
+            select product;
+
+            Console.WriteLine("Inexpensive");
+            Console.WriteLine();
+            foreach (Product product in inexpensive)
+            {
+                Console.WriteLine($"{ product.Title} ${ product.Price:f2}");
+            }
+
+            Console.WriteLine();
+
+            var expensive = from product in shoppingCart
+            where product.Price >= 100.00
+            orderby product.Price descending
+            select product;
+
+            Console.WriteLine("Expensive");
+            Console.WriteLine();
+            foreach (Product product in expensive)
+            {
+                Console.WriteLine($"{ product.Title} ${ product.Price:f2}");
+            }
+
+            List<int> numbers = new List<int>() { 9, -59, 23, 71, -74, 13, 52, 44, 2 };
+            var smallPositiveNumbers = numbers.Where(n => n < 40 && n > 0).OrderBy(n => n);
+            var allBetweenSmall = numbers.All(n => n > -5 && n < 39); // false
+            var allBetweenLarge = numbers.All(n => n > -100 && n < 400); // true
+
+            Console.WriteLine(allBetweenSmall);
+            Console.WriteLine(allBetweenLarge);
+
+            List<int> sampleNumbers = new List<int> { 18, 9, 5, 6, 84, 2, 5, 13 };
+            bool areAllEven = sampleNumbers.All(number => number % 2 == 0);
+            Console.WriteLine(areAllEven);
+
+            IEnumerable<int> onlyEvens = sampleNumbers.Where(number => number % 2 == 0);
+            onlyEvens.ToList().ForEach(evenValue => Console.WriteLine(evenValue + " is an even value"));
+
+            IEnumerable<int> sampleNumbersSquared = sampleNumbers.Select(number => number * number);
+            int small = sampleNumbers.Single(n => n < 5);
+            Console.WriteLine(small);
         }
         public class CohortReport
         {
             public string CohortName { get; set; }
             public int StudentCount { get; set; }
         }
+
+        public class Product
+        {
+            /*
+            Properties
+            */
+            public string Title { get; set; }
+            public double Price { get; set; }
+
+            // Constructor method
+            public Product(string title, double price)
+            {
+                this.Title = title;
+                this.Price = price;
+            }
+        }
+
     }
 }
